@@ -1,0 +1,63 @@
+import { LitElement, html, css } from 'lit';
+
+class CounterApp extends LitElement {
+  static properties = {
+    counter: { type: Number },
+    min: { type: Number },
+    max: { type: Number }
+  };
+
+  constructor() {
+    super();
+    this.counter = 0;
+    this.min = 0;
+    this.max = 10;
+  }
+
+  static styles = css`
+    .counter {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    button {
+      font-size: 1.2rem;
+      margin: 0 10px;
+    }
+    .highlight {
+      color: red;
+    }
+  `;
+
+  increment() {
+    if (this.counter < this.max) {
+      this.counter++;
+      this.checkSpecialEffects();
+    }
+  }
+
+  decrement() {
+    if (this.counter > this.min) {
+      this.counter--;
+    }
+  }
+
+  checkSpecialEffects() {
+    if (this.counter === 21) {
+      import('@haxtheweb/multiple-choice').then(module => {
+        module.makeItRain();
+      });
+    }
+  }
+
+  render() {
+    return html`
+      <div class="counter ${this.counter >= 18 ? 'highlight' : ''}">
+        ${this.counter}
+      </div>
+      <button @click="${this.decrement}" ?disabled="${this.counter <= this.min}">-</button>
+      <button @click="${this.increment}" ?disabled="${this.counter >= this.max}">+</button>
+    `;
+  }
+}
+
+customElements.define('counter-app', CounterApp);
